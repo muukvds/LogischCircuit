@@ -13,17 +13,18 @@ namespace LogischCircuit.Model
         private int _amountOfProbes;
 
         public List<NodeTemplate> Inputs { get; set; }
+        public List<NodeTemplate> Nodes { get; set; }
+        public List<NodeTemplate> Probes { get; set; }
 
         //todo make a list of components and outpuds (probes) to ba able to show in the view 
 
-
         public int AmountOfProbes { get; set; }
-        public List<NodeTemplate> Nodes { get; set; }
-        public List<NodeTemplate> Probes { get; set; }
 
         public Circuit()
         {
             Inputs = new List<NodeTemplate>();
+            Nodes = new List<NodeTemplate>();
+            Probes = new List<NodeTemplate>();
             _amountOfProbes = 0;
         }
 

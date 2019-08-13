@@ -23,6 +23,7 @@ namespace LogischCircuit.Model
 
         public void AddChild(IBoard child)
         {
+            Children.Clear();
             Children.Add(child);
         }
 
