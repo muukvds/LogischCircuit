@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 
 namespace LogischCircuit.Factory
 {
+
+    // factory to get all the files and file names in the Circuits folder
+    // also has a singelton pattern
     public class FileSelectorFactory
     {
         Dictionary<string, string> _files;
+        private static FileSelectorFactory _instance = null;
 
         public IEnumerable<string> getFileNames
         {
@@ -18,6 +22,7 @@ namespace LogischCircuit.Factory
 
         public FileSelectorFactory()
         {
+            _instance = this;
             _files = new Dictionary<string, string>();
             ReadFiles();
         }
@@ -32,11 +37,20 @@ namespace LogischCircuit.Factory
             }
         }
 
-
-
         public string GetFilePath(string key)
         {
             return _files[key];
+        }
+
+        //singelton pattern
+        public static FileSelectorFactory GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new FileSelectorFactory();
+            }
+
+            return _instance;
         }
 
 

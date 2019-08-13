@@ -8,21 +8,31 @@ using LogischCircuit.Interface;
 
 namespace LogischCircuit.Model
 {
-    class Probe : BaseNode
+    class Probe : NodeTemplate
     {
-        public override void AddChild(BaseNode child)
+
+        public Probe()
         {
-            throw new NotImplementedException();
+            Parents = new List<NodeTemplate>();
         }
 
-        public override void AddStrategy(ICalculationStrategy strategy)
+        public override void AddChild(NodeTemplate child)
         {
-            throw new NotImplementedException();
+            child.AddParent(this);
         }
 
         public override void Calculate()
         {
-            throw new NotImplementedException();
+            Output = Parents[0].Output;
+
         }
+
+        public override void AddStrategy(ICalculationStrategy strategy)
+        {
+
+        }
+
+
+
     }
 }

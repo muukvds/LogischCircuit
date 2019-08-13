@@ -10,6 +10,8 @@ using LogischCircuit.Parser;
 
 namespace LogischCircuit.Builder
 {
+    //builds the circuit, creates node builders to create the nodes to add to the circuit after reading the file from the filepath
+    
     class CircuitBuilder
     {
         private IBoard _circuit;
@@ -21,6 +23,7 @@ namespace LogischCircuit.Builder
             _circuit = new Circuit();
         }
 
+        // reads the file from the path and created the _connections dictonairy
         private void ReadFile(string path)
         {
             TextFileParser tp = new TextFileParser();
@@ -30,7 +33,6 @@ namespace LogischCircuit.Builder
 
             foreach (string node in nodes)
             {
-
                 var n = node.Split(':').Select(x => x.Trim())
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .ToArray();
@@ -39,7 +41,6 @@ namespace LogischCircuit.Builder
 
                 _nodes.Add(n);
             }
-
 
             _connections = new Dictionary<string, string[]>();
 
@@ -55,57 +56,20 @@ namespace LogischCircuit.Builder
             }
         }
 
+        //calles the ReadFile method and 
         public void Create(string filepath)
         {
-            //VRAAG readfile in Create emethod??? mag dat?
             ReadFile(filepath);
-            //VRAAG: moeten we een private field met nodefactory maken of elke keer opnieuwe ophalen in de for loop?
+            BuildNodes(out Dictionary<string, NodeTemplate> nodeList);
+            ConnectNodes(nodeList);
+        }
 
-            Dictionary<string, BaseNode> nodeList = new Dictionary<string, BaseNode>();
-
-            foreach (string[] node in _nodes)
+        private void ConnectNodes(Dictionary<string, NodeTemplate> nodeList)
+        {
+            // connects the notes to eatch other, and checkes if the connections are correct
+            foreach (KeyValuePair<string, NodeTemplate> entry in nodeList)
             {
-
-               // NodeBuilder builder;
-
-                if (node[1].StartsWith("INPUT"))
-                {
-                   // builder = new NodeBuilder();
-
-                    if (node[1].EndsWith("HIGH"))
-                    {
-                       // builder.SetOutput(true);
-                    }
-                    else
-                    {
-                       // builder.SetOutput(false);
-                    }
-
-                   // builder.SetId(node[0]);
-                   // BaseNode inputNode = builder.Build();
-                    //nodeList[node[0]] = inputNode;
-                   // _circuit.Inputs.Add(inputNode);
-                }
-
-                else if (node[1] == "PROBE")
-                {
-                   // builder = new NodeBuilder("PROBE");
-                   // builder.SetId(node[0]);
-                   // nodeList[node[0]] = builder.Build();
-
-                }
-
-                else
-                {
-                   // builder = new NodeBuilder();
-                  //  builder.SetId(node[0]);
-                   // builder.AddStrategy(node[1]);
-                  //  nodeList[node[0]] = builder.Build();
-                }
-            }
-
-            foreach (KeyValuePair<string, BaseNode> entry in nodeList)
-            {
+                // add node to other node as a chiled if nodeId exists in connections
                 if (_connections.ContainsKey(entry.Key))
                 {
                     foreach (string conn in _connections[entry.Key])
@@ -113,6 +77,10 @@ namespace LogischCircuit.Builder
                         entry.Value.AddChild(nodeList[conn]);
                     }
                 }
+
+                //todo iets met de loop
+                // checkes if nodes are connected to an other node.
+                // if a loop acours the circuit will still be build but the calculate will just stop.
                 else if (!(entry.Value is Probe))
                 {
                     if (entry.Value.Output.HasValue)
@@ -123,12 +91,57 @@ namespace LogischCircuit.Builder
                     {
                         Console.WriteLine("Unconnected!!!!!!!!!");
                     }
-                    //VRAAG: circuit 3 heeft een input zonder connecties maar is wel goed??
+                }
+            }
+        }
+
+        private void BuildNodes(out Dictionary<string, NodeTemplate> nodeList)
+        {
+            //dictonairy of nodeId and node
+            nodeList = new Dictionary<string, NodeTemplate>();
+
+            // builds nodes and adds them to the circuit
+            foreach (string[] node in _nodes)
+            {
+                NodeBuilder builder;
+
+                if (node[1].StartsWith("INPUT"))
+                {
+                    builder = new NodeBuilder();
+
+                    if (node[1].EndsWith("HIGH"))
+                    {
+                        builder.SetOutput(true);
+                    }
+                    else
+                    {
+                        builder.SetOutput(false);
+                    }
+
+                    builder.SetId(node[0]);
+                    NodeTemplate inputNode = builder.Build();
+                    nodeList[node[0]] = inputNode;
+                    _circuit.Inputs.Add(inputNode);
+                }
+                else if (node[1] == "PROBE")
+                {
+                    builder = new NodeBuilder("PROBE");
+                    builder.SetId(node[0]);
+                    NodeTemplate probeNode = builder.Build();
+                    nodeList[node[0]] = probeNode;
+                    _circuit.Probes.Add(probeNode);
 
                 }
-
+                else
+                {
+                    builder = new NodeBuilder();
+                    builder.SetId(node[0]);
+                    builder.AddStrategy(node[1]);
+                    NodeTemplate newNode = builder.Build();
+                    nodeList[node[0]] = newNode;
+                    _circuit.Nodes.Add(newNode);
+                }
             }
-
         }
 
         public IBoard Build()

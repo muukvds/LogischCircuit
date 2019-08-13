@@ -70,7 +70,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Base\BaseNode.cs" />
+    <Compile Include="Builder\NodeBuilder.cs" />
+    <Compile Include="Decorator\ANDDecorator.cs" />
+    <Compile Include="Decorator\NOTDecorator.cs" />
+    <Compile Include="Decorator\ORDecorator.cs" />
+    <Compile Include="Facade\RegistryFacade.cs" />
+    <Compile Include="Factory\CalculationStrategyDecoratorFactory.cs" />
+    <Compile Include="Factory\CalculationStrategyFactory.cs" />
+    <Compile Include="States\BaseState.cs" />
+    <Compile Include="States\CompleteState.cs" />
+    <Compile Include="States\ReadyState.cs" />
+    <Compile Include="States\UnreadyState.cs" />
+    <Compile Include="Strategy\AND.cs" />
+    <Compile Include="Strategy\NOT.cs" />
+    <Compile Include="Strategy\OR.cs" />
+    <Compile Include="Template\NodeTemplate.cs" />
     <Compile Include="Builder\CircuitBuilder.cs" />
     <Compile Include="Controller\MainController.cs" />
     <Compile Include="Factory\FileSelectorFactory.cs" />
@@ -82,6 +96,7 @@
     <Compile Include="Model\Probe.cs" />
     <Compile Include="Parser\TextFileParser.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\NodeViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

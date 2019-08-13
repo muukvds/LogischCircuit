@@ -12,20 +12,24 @@ namespace LogischCircuit.Model
     {
         private int _amountOfProbes;
 
-        // public bool? Output { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public List<BaseNode> Inputs { get; set; }
+        public List<NodeTemplate> Inputs { get; set; }
+
+        //todo make a list of components and outpuds (probes) to ba able to show in the view 
+
 
         public int AmountOfProbes { get; set; }
+        public List<NodeTemplate> Nodes { get; set; }
+        public List<NodeTemplate> Probes { get; set; }
 
         public Circuit()
         {
-            Inputs = new List<BaseNode>();
+            Inputs = new List<NodeTemplate>();
             _amountOfProbes = 0;
         }
 
         public void Calculate()
         {
-            foreach (BaseNode input in Inputs)
+            foreach (NodeTemplate input in Inputs)
             {
                 input.Calculate();
             }

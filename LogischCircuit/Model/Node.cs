@@ -5,24 +5,47 @@ using System.Text;
 using System.Threading.Tasks;
 using LogischCircuit.Base;
 using LogischCircuit.Interface;
+using LogischCircuit.State;
 
 namespace LogischCircuit.Model
 {
-    class Node : BaseNode
+    public class Node : NodeTemplate
     {
-        public override void AddChild(BaseNode child)
+        public List<NodeTemplate> Children { get; private set; }
+        public ICalculationStrategy CalculationStrategy { get; private set; }
+        public BaseState State { get; set; }
+        
+        public Node()
         {
-            throw new NotImplementedException();
+            Parents = new List<NodeTemplate>();
+            Children = new List<NodeTemplate>();
+            State = new UnreadyState(this);
+        }
+
+        public Node(ICalculationStrategy strategy)
+        {
+            CalculationStrategy = strategy;
+            Parents = new List<NodeTemplate>();
+            Children = new List<NodeTemplate>();
+            State = new UnreadyState(this);
         }
 
         public override void AddStrategy(ICalculationStrategy strategy)
         {
-            throw new NotImplementedException();
+            CalculationStrategy = strategy;
+        }
+
+        public override void AddChild(NodeTemplate child)
+        {
+            child.AddParent(this);
+            Children.Add(child);
         }
 
         public override void Calculate()
         {
-            throw new NotImplementedException();
+            //let state calculate to prevent a switch that will check the type of state
+            State.Calculate();
+
         }
     }
 }

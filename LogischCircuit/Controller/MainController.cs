@@ -7,6 +7,7 @@ using LogischCircuit.Base;
 using LogischCircuit.Builder;
 using LogischCircuit.Interface;
 using LogischCircuit.Model;
+using LogischCircuit.Facade;
 
 namespace LogischCircuit.Controller
 {
@@ -15,7 +16,7 @@ namespace LogischCircuit.Controller
         private Board _board;
         public MainController()
         {
-            //RegistryFacade.RegisterStrategies();
+            RegistryFacade.RegisterStrategies();
             _board = new Board();
         }
 
@@ -38,6 +39,24 @@ namespace LogischCircuit.Controller
         public void Run()
         {
             _board.Calculate();
+        }
+
+        //needs a loop to return all circuis
+        public List<NodeTemplate> getInputs()
+        {
+            return _board.Children[0].Inputs;
+        }
+
+        //needs a loop to return all circuis
+        public List<NodeTemplate> getNodes()
+        {
+            return _board.Children[0].Nodes;
+        }
+
+        //needs a loop to return all circuis
+        public List<NodeTemplate> getProbes()
+        {
+            return _board.Children[0].Probes;
         }
 
     }

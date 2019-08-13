@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogischCircuit.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,6 @@ namespace LogischCircuit.Interface
 {
     public interface ICalculationStrategy
     {
+        bool Calculate(List<NodeTemplate> parents);
     }
 }

@@ -9,7 +9,9 @@ namespace LogischCircuit.Interface
 {
     public interface IBoard
     {
-        List<BaseNode> Inputs { get; set; }
+        List<NodeTemplate> Inputs { get; set; }
+        List<NodeTemplate> Nodes { get; set; }
+        List<NodeTemplate> Probes { get; set; }
 
         void Calculate();
     }

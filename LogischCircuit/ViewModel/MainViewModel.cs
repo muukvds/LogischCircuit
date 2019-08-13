@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using LogischCircuit.Controller;
 using LogischCircuit.Factory;
+using System.Linq;
 
 namespace LogischCircuit.ViewModel
 {
@@ -22,6 +23,10 @@ namespace LogischCircuit.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
+    /// is het netter om een decorator alleen een AND te noemen omdat hij al in de Decorator map staat????
+
+
+
     public class MainViewModel : ViewModelBase
     {
         private bool _running;
@@ -29,6 +34,9 @@ namespace LogischCircuit.ViewModel
         private FileSelectorFactory _fileSelectorFactory;
 
         public ObservableCollection<string> FileNames { get; set; }
+        public ObservableCollection<NodeViewModel> Inputs { get; set; }
+        public ObservableCollection<NodeViewModel> Nodes { get; set; }
+        public ObservableCollection<NodeViewModel> Probes { get; set; }
 
         private string _selectedFileName;
         public string SelectedFileName
@@ -40,7 +48,6 @@ namespace LogischCircuit.ViewModel
                 RaisePropertyChanged("SelectedFileName");
              
                 BuildCommand.RaiseCanExecuteChanged();
-          
             }
         }
 
@@ -53,7 +60,7 @@ namespace LogischCircuit.ViewModel
 
             BuildCommand = new RelayCommand(BuildCircuit, CanBuildCircuit);
 
-            _fileSelectorFactory = new FileSelectorFactory();
+            _fileSelectorFactory = FileSelectorFactory.GetInstance();
             FileNames = new ObservableCollection<string>(_fileSelectorFactory.getFileNames);
         }
 
@@ -61,7 +68,11 @@ namespace LogischCircuit.ViewModel
         {
             string filepath = _fileSelectorFactory.GetFilePath(_selectedFileName);
             _mc.BuildCircuit(filepath);
-           
+
+            Inputs = new ObservableCollection<NodeViewModel>(_mc.getInputs().Select(i => new NodeViewModel(i)));
+            Nodes = new ObservableCollection<NodeViewModel>(_mc.getNodes().Select(n => new NodeViewModel(n)));
+            Probes = new ObservableCollection<NodeViewModel>(_mc.getProbes().Select(p => new NodeViewModel(p)));
+
         }
 
         private bool CanBuildCircuit()

@@ -11,12 +11,14 @@ namespace LogischCircuit.Model
     class Board : IBoard
     {
         public List<IBoard> Children { get; private set; }
-        public List<BaseNode> Inputs { get; set; }
+        public List<NodeTemplate> Inputs { get; set; }
+        public List<NodeTemplate> Nodes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public List<NodeTemplate> Probes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Board()
         {
             Children = new List<IBoard>();
-            Inputs = new List<BaseNode>();
+            Inputs = new List<NodeTemplate>();
         }
 
         public void AddChild(IBoard child)
