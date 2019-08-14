@@ -17,6 +17,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -24,5 +25,7 @@
         <ComboBox x:Name="ComboBoxSelectCircuit" ItemsSource="{Binding FileNames}" SelectedValue="{Binding SelectedFileName}" Margin="2" Grid.Column="2" Grid.Row="0"/>
         <Button x:Name="BuildCircuit" Content="Build Circuit" Command="{ Binding BuildCommand }" Grid.Row="0" Grid.Column="3" Margin="2"></Button>
 
-</Grid>
+        <Label x:Name="LabelErrorMessage" Content="{Binding ErrorMessage}"  Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="5" Margin="2" />
+
+    </Grid>
 </Window>

@@ -11,6 +11,7 @@ namespace LogischCircuit.ViewModel
     {
         private NodeBase _node;
         private MainViewModel _vm;
+
         public NodeViewModel(NodeBase node, MainViewModel vm)
         {
             _node = node;

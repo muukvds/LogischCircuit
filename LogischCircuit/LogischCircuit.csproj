@@ -73,6 +73,7 @@
     <Compile Include="Adapter\FileSelectorAdapter.cs" />
     <Compile Include="Builder\NodeBuilder.cs" />
     <Compile Include="Decorator\NOTDecorator.cs" />
+    <Compile Include="Utilities\TextFileReader.cs" />
     <Compile Include="Registry\Registry.cs" />
     <Compile Include="Factory\CalculationStrategyDecoratorFactory.cs" />
     <Compile Include="Factory\CalculationStrategyFactory.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="Model\Circuit.cs" />
     <Compile Include="Model\Node.cs" />
     <Compile Include="Model\Probe.cs" />
-    <Compile Include="Parser\TextFileParser.cs" />
+    <Compile Include="Utilities\Parser.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\NodeViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
