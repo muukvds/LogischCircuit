@@ -9,7 +9,7 @@ namespace LogischCircuit.Factory
 {
     class CalculationStrategyFactory
     {
-        public Dictionary<string, Type> _strategies;
+        private Dictionary<string, Type> _strategies;
         private static CalculationStrategyFactory _instance = null;
 
         public CalculationStrategyFactory()
@@ -29,6 +29,12 @@ namespace LogischCircuit.Factory
 
         }
 
+        public void ResetDictionary()
+        {
+            _strategies = new Dictionary<string, Type>();
+        }
+
+        //gets singleton instance
         public static CalculationStrategyFactory GetInstance()
         {
 
@@ -39,6 +45,7 @@ namespace LogischCircuit.Factory
 
             return _instance;
         }
+
 
     }
 }

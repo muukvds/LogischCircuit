@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Command;
 using LogischCircuit.Controller;
 using LogischCircuit.Factory;
 using System.Linq;
+using LogischCircuit.Adapter;
 
 namespace LogischCircuit.ViewModel
 {
@@ -25,18 +26,28 @@ namespace LogischCircuit.ViewModel
     /// </summary>
     /// is het netter om een decorator alleen een AND te noemen omdat hij al in de Decorator map staat????
 
-
-
     public class MainViewModel : ViewModelBase
     {
         private bool _running;
         private MainController _mc;
-        private FileSelectorFactory _fileSelectorFactory;
+        private FileSelectorAdapter _fileSelectorFactoryAdapter;
 
         public ObservableCollection<string> FileNames { get; set; }
         public ObservableCollection<NodeViewModel> Inputs { get; set; }
         public ObservableCollection<NodeViewModel> Nodes { get; set; }
         public ObservableCollection<NodeViewModel> Probes { get; set; }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                RaisePropertyChanged();
+            }
+        }
 
         private string _selectedFileName;
         public string SelectedFileName
@@ -45,8 +56,7 @@ namespace LogischCircuit.ViewModel
             set
             {
                 _selectedFileName = value;
-                RaisePropertyChanged("SelectedFileName");
-             
+                RaisePropertyChanged();
                 BuildCommand.RaiseCanExecuteChanged();
             }
         }
@@ -56,23 +66,23 @@ namespace LogischCircuit.ViewModel
         public MainViewModel()
         {
             _running = false;
-            _mc = new MainController();
+            _mc = new MainController(this);
 
             BuildCommand = new RelayCommand(BuildCircuit, CanBuildCircuit);
 
-            _fileSelectorFactory = FileSelectorFactory.GetInstance();
-            FileNames = new ObservableCollection<string>(_fileSelectorFactory.getFileNames);
+            _fileSelectorFactoryAdapter = new FileSelectorAdapter(FileSelectorFactory.GetInstance());
+
+            FileNames = new ObservableCollection<string>(_fileSelectorFactoryAdapter.getNames());
         }
 
         private void BuildCircuit()
         {
-            string filepath = _fileSelectorFactory.GetFilePath(_selectedFileName);
+            string filepath = _fileSelectorFactoryAdapter.GetPathFromFile(_selectedFileName);
             _mc.BuildCircuit(filepath);
 
-            Inputs = new ObservableCollection<NodeViewModel>(_mc.getInputs().Select(i => new NodeViewModel(i)));
-            Nodes = new ObservableCollection<NodeViewModel>(_mc.getNodes().Select(n => new NodeViewModel(n)));
-            Probes = new ObservableCollection<NodeViewModel>(_mc.getProbes().Select(p => new NodeViewModel(p)));
-
+            Inputs = new ObservableCollection<NodeViewModel>(_mc.getInputs().Select(i => new NodeViewModel(i,this)));
+            Nodes = new ObservableCollection<NodeViewModel>(_mc.getNodes().Select(n => new NodeViewModel(n,this)));
+            Probes = new ObservableCollection<NodeViewModel>(_mc.getProbes().Select(p => new NodeViewModel(p,this)));
         }
 
         private bool CanBuildCircuit()

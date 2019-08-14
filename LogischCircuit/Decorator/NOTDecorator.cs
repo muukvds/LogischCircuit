@@ -13,21 +13,19 @@ namespace LogischCircuit.Decorator
     class NOTDecorator : ICalculationStrategy
     {
         private ICalculationStrategy _baseStrategy;
-        private ICalculationStrategy _strategy;
 
         public NOTDecorator(ICalculationStrategy strategy) : base()
         {
-            _baseStrategy = new NOT();
-            _strategy = strategy;
+            _baseStrategy = strategy;
         }
 
-        public bool Calculate(List<NodeTemplate> parents)
+        public bool Calculate(List<NodeBase> parents)
         {
-            if (_baseStrategy.Calculate(parents) != _strategy.Calculate(parents))
+            //returns the opposite of its base strategy
+            if (!_baseStrategy.Calculate(parents))
             {
                 return true;
             }
-
             return false;
         }
 

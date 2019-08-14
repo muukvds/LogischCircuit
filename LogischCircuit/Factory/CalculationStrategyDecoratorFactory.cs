@@ -10,7 +10,7 @@ namespace LogischCircuit.Factory
     class CalculationStrategyDecoratorFactory
     {
 
-        public Dictionary<string, Type> _strategies;
+        private Dictionary<string, Type> _strategies;
         private static CalculationStrategyDecoratorFactory _instance = null;
 
         public CalculationStrategyDecoratorFactory()
@@ -21,7 +21,6 @@ namespace LogischCircuit.Factory
 
         public ICalculationStrategy CreateStrategy(ICalculationStrategy strategy, string name)
         {
-            // use activator to dinamicly create classes withouth hardcoding what class you need to create. this prevents a switch
             return (ICalculationStrategy)Activator.CreateInstance(_strategies[name], strategy);
         }
 
@@ -30,6 +29,12 @@ namespace LogischCircuit.Factory
             _strategies.Add(type, typeof(T));
         }
 
+        public void ResetDictionary()
+        {
+            _strategies = new Dictionary<string, Type>();
+        }
+
+        //gets singleton instance
         public static CalculationStrategyDecoratorFactory GetInstance()
         {
             if (_instance == null)

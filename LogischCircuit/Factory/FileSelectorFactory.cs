@@ -15,9 +15,9 @@ namespace LogischCircuit.Factory
         Dictionary<string, string> _files;
         private static FileSelectorFactory _instance = null;
 
-        public IEnumerable<string> getFileNames
+        public IEnumerable<string> getFileNames()
         {
-            get { return _files.Keys; }
+            return _files.Keys; 
         }
 
         public FileSelectorFactory()

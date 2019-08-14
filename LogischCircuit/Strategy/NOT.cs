@@ -11,7 +11,7 @@ namespace LogischCircuit.Strategy
 {
     class NOT : ICalculationStrategy
     {
-        public bool Calculate(List<NodeTemplate> parents)
+        public bool Calculate(List<NodeBase> parents)
         {
             if (parents[0].Output.Value)
             {

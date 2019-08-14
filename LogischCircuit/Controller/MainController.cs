@@ -7,56 +7,71 @@ using LogischCircuit.Base;
 using LogischCircuit.Builder;
 using LogischCircuit.Interface;
 using LogischCircuit.Model;
-using LogischCircuit.Facade;
+using LogischCircuit.Registries;
+using LogischCircuit.ViewModel;
 
 namespace LogischCircuit.Controller
 {
     class MainController
     {
-        private Board _board;
-        public MainController()
+
+        private MainViewModel _mv;
+        private Circuit _circuit;
+
+        public MainController(MainViewModel mv)
         {
-            RegistryFacade.RegisterStrategies();
-            _board = new Board();
+            _mv = mv;
+
+            //register strategies to singleton factories
+            Registry.RegisterStrategies();
         }
 
-        public void CreateBoard()
+        public Circuit GetCircuit()
         {
-            Board newBoard = new Board();
-            _board.AddChild(newBoard);
-            _board = newBoard;
+            return _circuit;
         }
 
-        public void BuildCircuit(string filepath)
+        public bool BuildCircuit(string filepath)
         {
             CircuitBuilder cb = new CircuitBuilder();
-            cb.Create(filepath);
-            IBoard circuit = cb.Build();
-            _board.AddChild(circuit);
+            if (!cb.Create(filepath))
+            {
+                _mv.ErrorMessage = cb.ErrorMessage;
+                return false;
+            }
+            _mv.ErrorMessage = cb.ErrorMessage;
+            _circuit = cb.Build();
+            _circuit.Inputs.ForEach(inp => inp.InfiniteLoop(null));
+            return true;
+        }
 
+        public void SetStates()
+        {
+            _circuit.SetStates();
         }
 
         public void Run()
         {
-            _board.Calculate();
+            SetStates();
+            _circuit.Calculate();
         }
 
         //needs a loop to return all circuis
-        public List<NodeTemplate> getInputs()
+        public List<NodeBase> getInputs()
         {
-            return _board.Children[0].Inputs;
+            return _circuit.Inputs;
         }
 
         //needs a loop to return all circuis
-        public List<NodeTemplate> getNodes()
+        public List<NodeBase> getNodes()
         {
-            return _board.Children[0].Nodes;
+            return _circuit.Nodes;
         }
 
         //needs a loop to return all circuis
-        public List<NodeTemplate> getProbes()
+        public List<NodeBase> getProbes()
         {
-            return _board.Children[0].Probes;
+            return _circuit.Outputs;
         }
 
     }

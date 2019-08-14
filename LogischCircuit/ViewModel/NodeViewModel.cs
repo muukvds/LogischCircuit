@@ -9,10 +9,12 @@ namespace LogischCircuit.ViewModel
 {
     public class NodeViewModel
     {
-        private NodeTemplate _node;
-        public NodeViewModel(NodeTemplate node)
+        private NodeBase _node;
+        private MainViewModel _vm;
+        public NodeViewModel(NodeBase node, MainViewModel vm)
         {
             _node = node;
+            _vm = vm;
         }
 
         public string Id { get { return _node.NodeId; } }

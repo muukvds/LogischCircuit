@@ -1,5 +1,4 @@
-﻿using LogischCircuit.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace LogischCircuit.Interface
 {
-    public interface ICalculationStrategy
+    interface IFileSelector
     {
-        bool Calculate(List<NodeBase> parents);
+        string GetPathFromFile(string name);
+
+        IEnumerable<string> getNames();
+
     }
 }

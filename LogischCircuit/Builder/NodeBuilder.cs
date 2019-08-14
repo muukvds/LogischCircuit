@@ -14,7 +14,7 @@ namespace LogischCircuit.Builder
     // uses decorator pattern and factory
     class NodeBuilder
     {
-        NodeTemplate _node;
+        NodeBase _node;
 
         public NodeBuilder(string name)
         {
@@ -26,32 +26,28 @@ namespace LogischCircuit.Builder
             _node = new Node();
         }
 
-        //todo add type for view
         public void AddStrategy(string strategyName)
         {
             ICalculationStrategy strategy;
 
-            switch (strategyName)
+            if (strategyName == "NAND")
             {
-                case "XOR":
-                    strategy = CalculationStrategyFactory.GetInstance().CreateStrategy("AND");
-                    strategy = CalculationStrategyDecoratorFactory.GetInstance().CreateStrategy(strategy, "ORDecorator");
-                    _node.AddStrategy(strategy);
-                    break;
-                case "NAND":
-                    strategy = CalculationStrategyFactory.GetInstance().CreateStrategy("NOT");
-                    strategy = CalculationStrategyDecoratorFactory.GetInstance().CreateStrategy(strategy, "ANDDecorator");
-                    _node.AddStrategy(strategy);
-                    break;
-                case "NOR":
-                    strategy = CalculationStrategyFactory.GetInstance().CreateStrategy("NOT");
-                    strategy = CalculationStrategyDecoratorFactory.GetInstance().CreateStrategy(strategy, "ORDecorator");
-                    _node.AddStrategy(strategy);
-                    break;
-                default:
-                    strategy = CalculationStrategyFactory.GetInstance().CreateStrategy(strategyName);
-                    _node.AddStrategy(strategy);
-                    break;
+                strategy = CalculationStrategyFactory.GetInstance().CreateStrategy("AND");
+                strategy = CalculationStrategyDecoratorFactory.GetInstance().CreateStrategy(strategy, "NOTDecorator");
+                _node.AddStrategy(strategy);
+            }
+
+            else if (strategyName == "NOR")
+            {
+                strategy = CalculationStrategyFactory.GetInstance().CreateStrategy("OR");
+                strategy = CalculationStrategyDecoratorFactory.GetInstance().CreateStrategy(strategy, "NOTDecorator");
+                _node.AddStrategy(strategy);
+            }
+
+            else
+            {
+                strategy = CalculationStrategyFactory.GetInstance().CreateStrategy(strategyName);
+                _node.AddStrategy(strategy);
             }
         }
 
@@ -65,7 +61,7 @@ namespace LogischCircuit.Builder
             _node.Output = output;
         }
 
-        public NodeTemplate Build()
+        public NodeBase Build()
         {
             return _node;
         }

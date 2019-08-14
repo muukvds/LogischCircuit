@@ -8,32 +8,37 @@ using LogischCircuit.Interface;
 
 namespace LogischCircuit.Model
 {
-    class Circuit : IBoard
+    class Circuit
     {
-        private int _amountOfProbes;
 
-        public List<NodeTemplate> Inputs { get; set; }
-        public List<NodeTemplate> Nodes { get; set; }
-        public List<NodeTemplate> Probes { get; set; }
+        public List<NodeBase> Inputs { get; set; }
+        public List<NodeBase> Nodes { get; set; }
+        public List<NodeBase> Outputs { get; set; }
 
-        //todo make a list of components and outpuds (probes) to ba able to show in the view 
-
-        public int AmountOfProbes { get; set; }
 
         public Circuit()
         {
-            Inputs = new List<NodeTemplate>();
-            Nodes = new List<NodeTemplate>();
-            Probes = new List<NodeTemplate>();
-            _amountOfProbes = 0;
+            Inputs = new List<NodeBase>();
+            Nodes = new List<NodeBase>();
+            Outputs = new List<NodeBase>();
         }
 
         public void Calculate()
         {
-            foreach (NodeTemplate input in Inputs)
+            foreach (NodeBase input in Inputs)
             {
                 input.Calculate();
             }
         }
+
+        public void SetStates()
+        {
+            foreach (Node node in Inputs)
+            {
+                node.SetChildrenStates();
+            }
+        }
+
+
     }
 }

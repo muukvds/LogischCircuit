@@ -5,26 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using LogischCircuit.Base;
 using LogischCircuit.Interface;
+using LogischCircuit.Visitor;
 
 namespace LogischCircuit.Model
 {
-    class Probe : NodeTemplate
+    public class Probe : NodeBase
     {
+        private IVisitor _visitor;
 
         public Probe()
         {
-            Parents = new List<NodeTemplate>();
+            Parents = new List<NodeBase>();
+            _visitor = new NodeVisitor();
         }
 
-        public override void AddChild(NodeTemplate child)
+        public override void AddChild(NodeBase child)
         {
-            child.AddParent(this);
+            Accept(_visitor, child);
         }
 
         public override void Calculate()
         {
             Output = Parents[0].Output;
-
         }
 
         public override void AddStrategy(ICalculationStrategy strategy)
@@ -32,7 +34,20 @@ namespace LogischCircuit.Model
 
         }
 
+        public override void InfiniteLoop(NodeBase calledBy)
+        {
 
+        }
 
+        public override void SetChildrenStates()
+        {
+            Output = null;
+        }
+
+        //accept visitor method
+        public override void Accept(IVisitor visitor, NodeBase child)
+        {
+            visitor.VisitProbe(this, child);
+        }
     }
 }

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace LogischCircuit.Interface
 {
-    public interface ICalculationStrategy
+    public interface INode
     {
-        bool Calculate(List<NodeBase> parents);
+        void Accept(IVisitor visitor, NodeBase child);
     }
 }

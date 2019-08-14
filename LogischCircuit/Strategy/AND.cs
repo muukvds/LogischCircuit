@@ -11,9 +11,10 @@ namespace LogischCircuit.Strategy
 {
     class AND : ICalculationStrategy
     {
-        public bool Calculate(List<NodeTemplate> parents)
+
+        public bool Calculate(List<NodeBase> parents)
         {
-            if (parents[0].Output.Value && parents[1].Output.Value)
+            if (parents.TrueForAll(p => p.Output.Value))
             {
                 return true;
             }

@@ -19,6 +19,7 @@ namespace LogischCircuit.State
             StateChangeCheck();
         }
 
+        //checks whether the node is ready to calculate its and changes its state based on the result.
         private void StateChangeCheck()
         {
             if (node.Parents.TrueForAll(p => p.Output.HasValue))
