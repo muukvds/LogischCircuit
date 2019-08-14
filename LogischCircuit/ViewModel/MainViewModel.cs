@@ -45,7 +45,7 @@ namespace LogischCircuit.ViewModel
             set
             {
                 _errorMessage = value;
-                RaisePropertyChanged();
+                base.RaisePropertyChanged();
             }
         }
 
@@ -73,6 +73,9 @@ namespace LogischCircuit.ViewModel
             _fileSelectorFactoryAdapter = new FileSelectorAdapter(FileSelectorFactory.GetInstance());
 
             FileNames = new ObservableCollection<string>(_fileSelectorFactoryAdapter.getNames());
+            Inputs = new ObservableCollection<NodeViewModel>();
+            Nodes = new ObservableCollection<NodeViewModel>();
+            Probes = new ObservableCollection<NodeViewModel>();
         }
 
         private void BuildCircuit()
@@ -80,9 +83,17 @@ namespace LogischCircuit.ViewModel
             string filepath = _fileSelectorFactoryAdapter.GetPathFromFile(_selectedFileName);
             _mc.BuildCircuit(filepath);
 
-            Inputs = new ObservableCollection<NodeViewModel>(_mc.getInputs().Select(i => new NodeViewModel(i,this)));
-            Nodes = new ObservableCollection<NodeViewModel>(_mc.getNodes().Select(n => new NodeViewModel(n,this)));
-            Probes = new ObservableCollection<NodeViewModel>(_mc.getProbes().Select(p => new NodeViewModel(p,this)));
+            Inputs.Clear();
+            _mc.getInputs().ForEach(i => Inputs.Add(new NodeViewModel(i, this)));
+
+            Nodes.Clear();
+            _mc.getNodes().ForEach(i => Nodes.Add(new NodeViewModel(i, this)));
+
+            Probes.Clear();
+            _mc.getProbes().ForEach(i => Probes.Add(new NodeViewModel(i, this)));
+
+            base.RaisePropertyChanged();
+            _mc.Run();
         }
 
         private bool CanBuildCircuit()
